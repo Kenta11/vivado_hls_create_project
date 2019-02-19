@@ -12,11 +12,10 @@ Comming soon...
 
 ## ライセンス
 
-MIT
+MIT License
 
 ## コンタクト
 
 作者: Kenta Arai
 
-[Twitter](https://twitter.com/isKenta14)
-[Blog](https://Kenta11.github.com/)
+Twitter: [@isKenta14](https://twitter.com/isKenta14)
