@@ -67,3 +67,51 @@ def generate_tcl(part, clock):
 
     print_INFO("Generate tcl scripts")
 
+# generate_c_code()
+# - generate the following C++ code
+#     - include/{target}.hpp
+#     - src/{target}.cpp
+#     - test/include/test_{target}.hpp
+#     - test/src/test_{target}.hpp
+def generate_cpp_code(target):
+    data = {
+        "target": target,
+        "TARGET": target.upper()
+    }
+
+    # generate hpp
+    env = jinja2.Environment(loader=jinja2.FileSystemLoader(base_path + "/template/c++/"))
+    template = env.get_template("header.hpp")
+
+    rendered = template.render(data)
+
+    with open("include/" + target + ".hpp", "w") as f:
+        f.write(str(rendered))
+
+    # generate cpp
+    env = jinja2.Environment(loader=jinja2.FileSystemLoader(base_path + "/template/c++/"))
+    template = env.get_template("code.cpp")
+
+    rendered = template.render(data)
+
+    with open("src/" + target + ".cpp", "w") as f:
+        f.write(str(rendered))
+
+    # generate test hpp
+    env = jinja2.Environment(loader=jinja2.FileSystemLoader(base_path + "/template/c++/"))
+    template = env.get_template("test-header.hpp")
+
+    rendered = template.render(data)
+
+    with open("test/include/test_" + target + ".hpp", "w") as f:
+        f.write(str(rendered))
+
+    # generate test cpp
+    env = jinja2.Environment(loader=jinja2.FileSystemLoader(base_path + "/template/c++/"))
+    template = env.get_template("test-code.cpp")
+
+    rendered = template.render(data)
+
+    with open("test/src/test_" + target + ".cpp", "w") as f:
+        f.write(str(rendered))
+

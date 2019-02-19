@@ -17,7 +17,8 @@ import util
 #     - board: board name that is expected *str* type. This name can be listed with list_devices()
 #     - solution: solutin name that is expected *str* type.
 #     - clock: clock that is expected *str* type, like "100MHz", "10.0ns", etc.
-#     - l: listing flag that is expected *bool* type.
+#     - l: flag of listing that is expected *bool* type.
+#     - C: flag of C++ code generation that is expected *bool* type.
 def parse_args():
     parser = argparse.ArgumentParser(description="generate Makefile and tcl scripts")
     parser.add_argument("-p", "--project", help="project name")
@@ -25,6 +26,7 @@ def parse_args():
     parser.add_argument("-s", "--solution", help="solution name")
     parser.add_argument("-c", "--clock", help="frequency or clock period")
     parser.add_argument("-l", action="store_true", help="listing devices")
+    parser.add_argument("-cpp", action="store_true", help="generate C++ code")
 
     args = parser.parse_args()
 
@@ -39,12 +41,17 @@ def parse_args():
 
     listing = args.l
 
+    cpp = args.cpp
+    if cpp is None:
+        cpp = False
+
     return {
         "project": project,
         "solution": solution,
         "board": board,
         "clock": clock,
-        "listing": listing
+        "listing": listing,
+        "cpp": cpp
     }
 
 # list_devices()
@@ -84,6 +91,8 @@ def generate_code(args):
     code_generator.generate_makefile(args["project"], args["solution"])
     code_generator.generate_dirs()
     code_generator.generate_tcl(args["part"], args["clock"])
+    if args["cpp"]:
+        code_generator.generate_cpp_code(args["project"])
 
 #########################
 ##### main function #####
