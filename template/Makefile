@@ -24,6 +24,7 @@ export: $(IP)
 $(IP): $(HDL)
 	vivado_hls script/export.tcl
 
+.PHONY: cosim
 cosim: $(COSIM)
 $(COSIM): $(HDL)
 	vivado_hls script/cosim.tcl

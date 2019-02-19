@@ -1,25 +1,23 @@
-# vim: fileencoding=utf-8
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 import argparse
 import os
-import shutil
-import json
-import pathlib
+import sys
 import xml.etree.ElementTree as ET
 
-import jinja2
+import code_generator
+from message import *
+import util
 
-base_path = os.path.dirname(os.path.dirname(__file__))
-
-def print_INFO(message):
-    print("INFO: ", message)
-
-def print_WARNING(message):
-    print("INFO:", message)
-
-def print_ERROR(message):
-    print("ERROR:", message)
-
+# parse_args()
+# - parse arguments
+# - return values
+#     - project: project name that is expected *str* type.
+#     - board: board name that is expected *str* type. This name can be listed with list_devices()
+#     - solution: solutin name that is expected *str* type.
+#     - clock: clock that is expected *str* type, like "100MHz", "10.0ns", etc.
+#     - l: listing flag that is expected *bool* type.
 def parse_args():
     parser = argparse.ArgumentParser(description="generate Makefile and tcl scripts")
     parser.add_argument("-p", "--project", help="project name")
@@ -38,19 +36,37 @@ def parse_args():
         solution = board
 
     clock = args.clock
-    if clock is None:
-        clock = "100MHz"
 
     listing = args.l
 
-    return (project, solution, board, clock, listing)
+    return {
+        "project": project,
+        "solution": solution,
+        "board": board,
+        "clock": clock,
+        "listing": listing
+    }
 
-def path_to_vivado():
-    with open(os.path.expanduser("~/.vivado_hls_create_project")) as f:
-        return json.load(f)["path_to_vivado"]
+# list_devices()
+# - list device names
+# - names are loaded from /path/to/Vivado/20xx.x/common/config/VivadoHls_boards.xml
+def list_devices():
+    tree = ET.parse(util.path_to_vivado() + "/common/config/VivadoHls_boards.xml")
+    root = tree.getroot()
 
+    print("Board" + (" " * 15) + "Part")
+    print("----------------------------")
+    for platform in root:
+        for board in platform:
+            print(board.attrib["name"], end="")
+            print(" " * (20 - len(board.attrib["name"])), end="")
+            print(board.attrib["part"])
+
+# search_device()
+# - search device name from VivadoHls_boards.xml
+# - names are loaded from /path/to/Vivado/20xx.x/common/config/VivadoHls_boards.xml
 def search_device(board_name):
-    tree = ET.parse(path_to_vivado() + "/common/config/VivadoHls_boards.xml")
+    tree = ET.parse(util.path_to_vivado() + "/common/config/VivadoHls_boards.xml")
     root = tree.getroot()
 
     for platform in root:
@@ -62,80 +78,43 @@ def search_device(board_name):
     print_ERROR("Not found part")
     return None
 
-def list_devices():
-    tree = ET.parse(path_to_vivado() + "/common/config/VivadoHls_boards.xml")
-    root = tree.getroot()
+# generate_code()
+# - generate Makefile and tcl scripts
+def generate_code(args):
+    code_generator.generate_makefile(args["project"], args["solution"])
+    code_generator.generate_dirs()
+    code_generator.generate_tcl(args["part"], args["clock"])
 
-    print("Board" + (" " * 15) + "Part")
-    print("----------------------------")
-    for platform in root:
-        for board in platform:
-            print(board.attrib["name"], end="")
-            print(" " * (20 - len(board.attrib["name"])), end="")
-            print(board.attrib["part"])
-
-def generate_makefile(project, solution):
-    env = jinja2.Environment(loader=jinja2.FileSystemLoader(base_path + "/template"))
-    template = env.get_template("Makefile")
-    data = {
-        "TARGET": project,
-        "SOLUTION": solution
-    }
-    
-    rendered = template.render(data)
-
-    with open("Makefile", "w") as f:
-        f.write(str(rendered))
-
-    print_INFO("Generate Makefile")
-
-def generate_dirs():
-    os.makedirs("include")
-    os.makedirs("src")
-    os.makedirs("test/include")
-    os.makedirs("test/src")
-    os.makedirs("script")
-
-    print_INFO("Generate directories")
-
-def generate_tcl(part, clock):
-    shutil.copy(base_path + "/template/tcl/csim.tcl",   "script/csim.tcl")
-    shutil.copy(base_path + "/template/tcl/export.tcl", "script/export.tcl")
-    shutil.copy(base_path + "/template/tcl/cosim.tcl",  "script/cosim.tcl")
-
-    env = jinja2.Environment(loader=jinja2.FileSystemLoader(base_path + "/template/tcl"))
-    template = env.get_template("csynth.tcl")
-    data = {
-        "PART": "{" + part + "}",
-        "CLOCK": clock
-    }
-
-    rendered = template.render(data)
-
-    with open("script/csynth.tcl", "w") as f:
-        f.write(str(rendered))
-
-    pathlib.Path("directives.tcl").touch()
-
-    print_INFO("Generate tcl scripts")
-
+#########################
+##### main function #####
+#########################
 def vivado_hls_create_project():
-    project, solution, board, clock, listing = parse_args()
-    if listing:
+    args = parse_args()
+
+    # listing device name
+    if args["listing"] == True:
         list_devices()
-    else:
-        if project is None:
+    # generate source code
+    elif args["listing"] == False:
+        if args["project"] is None:
             print_ERROR("set project name")
             exit(1)
-        if solution is None:
-            solution = board
-        part = search_device(board)
-        if part is None:
+
+        args["part"] = search_device(args["board"])
+        if args["part"] is None:
+            print_ERROR("set board name")
             exit(1)
 
-        generate_makefile(project, solution)
-        generate_dirs()
-        generate_tcl(part, clock)
+        if args["solution"] is None:
+            args["solution"] = board
+
+        if args["clock"] is None:
+            args["clock"] = "100MHz"
+
+        generate_code(args)
+    # no argument
+    else:
+        print_ERROR("Invalid arguments")
 
 if __name__ == '__main__':
     vivado_hls_create_project()

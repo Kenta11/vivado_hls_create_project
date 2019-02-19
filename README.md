@@ -4,19 +4,45 @@
 
 ## What is vivado_hls_create_project ?
 
-Tools that generate Makefile and tcl scripts for creating Vivado HLS project.
+Generate Makefile and tcl scripts for creating Vivado HLS project.
 
-## Usage
+## Basic Usage
 
-Comming soon...
+### Generate Makefile and tcl scripts
+
+Type `project name` and `board name`
+
+```
+$ vivado_hls_create_project -p `project name` -b `board name`
+```
+
+### Help
+
+```
+$ vivado_hls_create_project --help
+usage: vivado_hls_create_project.py [-h] [-p PROJECT] [-b BOARD] [-s SOLUTION] [-c CLOCK] [-l]
+
+generate Makefile and tcl scripts
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -p PROJECT, --project PROJECT
+                        project name
+  -b BOARD, --board BOARD
+                        board name
+  -s SOLUTION, --solution SOLUTION
+                        solution name
+  -c CLOCK, --clock CLOCK
+                        frequency or clock period
+  -l                    listing devices
+```
 
 ## LICENSE
 
-MIT
+MIT License
 
 ## CONTACT
 
-author: Kenta Arai
+Author: Kenta Arai
 
-[Twitter](https://twitter.com/isKenta14)
-[Blog](https://Kenta11.github.com/)
+Twitter: [@isKenta14](https://twitter.com/isKenta14)
