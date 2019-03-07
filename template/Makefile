@@ -4,6 +4,7 @@
 export HLS_TARGET   = {{TARGET}}
 export HLS_SOLUTION = {{SOLUTION}}
 # source files
+HLS_HEADER          = $(wildcard include/*) $(wildcard test/include/*)
 export HLS_SOURCE   = $(wildcard src/*)
 export HLS_TEST     = $(wildcard test/src/*)
 
@@ -31,12 +32,13 @@ $(COSIM): $(HDL)
 
 .PHONY: csynth
 csynth: $(HDL)
-$(HDL): $(CSIM) $(HLS_SOURCE)
+$(HDL): $(CSIM)
 	vivado_hls script/csynth.tcl
 
 .PHONY: csim
 csim: $(CSIM)
-$(CSIM):
+$(CSIM): $(HLS_SOURCE) $(HLS_TEST) $(HLS_HEADER)
+	make clean
 	vivado_hls script/csim.tcl
 
 .PHONY: clean
