@@ -21,12 +21,14 @@ import util
 #     - C: flag of C++ code generation that is expected *bool* type.
 def parse_args():
     parser = argparse.ArgumentParser(description="generate Makefile and tcl scripts")
+    parser.add_argument("-l", action="store_true", help="listing devices")
     parser.add_argument("-p", "--project", help="project name")
     parser.add_argument("-b", "--board", help="board name")
     parser.add_argument("-s", "--solution", help="solution name")
     parser.add_argument("-c", "--clock", help="frequency or clock period")
-    parser.add_argument("-l", action="store_true", help="listing devices")
     parser.add_argument("-cpp", action="store_true", help="generate C++ code")
+    parser.add_argument("-compiler_arg", help="argument for compiler")
+    parser.add_argument("-linker_arg", help="argument for linker")
 
     args = parser.parse_args()
 
@@ -51,7 +53,9 @@ def parse_args():
         "board": board,
         "clock": clock,
         "listing": listing,
-        "cpp": cpp
+        "cpp": cpp,
+        "compiler_arg": args.compiler_arg,
+        "linker_arg": args.linker_arg
     }
 
 # list_devices()
@@ -90,7 +94,7 @@ def search_device(board_name):
 def generate_code(args):
     code_generator.generate_makefile(args["project"], args["solution"])
     code_generator.generate_dirs()
-    code_generator.generate_tcl(args["part"], args["clock"])
+    code_generator.generate_tcl(args["part"], args["clock"], args["compiler_arg"], args["linker_arg"])
     if args["cpp"]:
         code_generator.generate_cpp_code(args["project"])
 

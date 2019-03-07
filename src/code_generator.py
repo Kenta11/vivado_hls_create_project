@@ -46,12 +46,27 @@ def generate_dirs():
 
 # generate_tcl()
 # - generate tcl scripts from template/tcl/*
-def generate_tcl(part, clock):
-    shutil.copy(base_path + "/template/tcl/csim.tcl",   "script/csim.tcl")
+def generate_tcl(part, clock, compiler_arg, linker_arg):
     shutil.copy(base_path + "/template/tcl/export.tcl", "script/export.tcl")
     shutil.copy(base_path + "/template/tcl/cosim.tcl",  "script/cosim.tcl")
 
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(base_path + "/template/tcl"))
+
+    # generate csim.tcl
+    template = env.get_template("csim.tcl")
+    COMPILER_ARG = compiler_arg if compiler_arg is not None else ""
+    LINKER_ARG = "\"-ldflags{}\"".format(linker_arg) if linker_arg is not None else ""
+    data = {
+        "COMPILER_ARG": COMPILER_ARG,
+        "LINKER_ARG": LINKER_ARG
+    }
+
+    rendered = template.render(data)
+
+    with open("script/csim.tcl", "w") as f:
+        f.write(str(rendered))
+
+    # generate csynth.tcl
     template = env.get_template("csynth.tcl")
     data = {
         "PART": "{" + part + "}",
@@ -63,6 +78,7 @@ def generate_tcl(part, clock):
     with open("script/csynth.tcl", "w") as f:
         f.write(str(rendered))
 
+    # generate directives.tcl
     pathlib.Path("directives.tcl").touch()
 
     print_INFO("Generate tcl scripts")
