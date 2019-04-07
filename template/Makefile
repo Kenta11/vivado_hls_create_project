@@ -29,18 +29,27 @@ $(IP): $(HDL)
 cosim: $(COSIM)
 $(COSIM): $(HDL)
 	vivado_hls script/cosim.tcl
+	touch $@
 
 .PHONY: csynth
 csynth: $(HDL)
 $(HDL): $(CSIM)
 	vivado_hls script/csynth.tcl
+	touch $@
 
 .PHONY: csim
 csim: $(CSIM)
-$(CSIM): $(HLS_SOURCE) $(HLS_TEST) $(HLS_HEADER)
-	make clean
+$(CSIM): $(HLS_TARGET) $(HLS_SOURCE) $(HLS_TEST) $(HLS_HEADER)
 	vivado_hls script/csim.tcl
+	touch $@
+
+$(HLS_TARGET):
+	vivado_hls script/init.tcl
+
+.PHONY: distclean
+distclean:
+	rm -rf $(HLS_TARGET)
 
 .PHONY: clean
 clean:
-	rm -rf $(HLS_TARGET) *.log
+	rm -rf $(IP) $(COSIM) $(HDL) $(CSIM) *.log
