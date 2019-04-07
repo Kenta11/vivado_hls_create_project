@@ -4,7 +4,7 @@
 import sys
 
 def print_INFO(message):
-    print("INFO: ", message)
+    print("INFO:", message)
 
 def print_WARNING(message):
     print("INFO:", message)
