@@ -12,7 +12,7 @@ def get_config():
         config["project"] = args.project_name
         # solution
         if args.solution is None:
-            config["solution"] = config["project"]
+            config["solution"] = args.board
         else:
             config["solution"] = args.solution
         # board
