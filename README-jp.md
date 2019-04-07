@@ -1,27 +1,85 @@
 # vivado_hls_create_project
 
-[English](README.md)
+English version: [vivado_hls_create_project](README.md)
 
 ## 概要
 
-Vivado HLSのプロジェクトを作るMakefileとtclスクリプトを自動生成するツールです．
+Vivado HLSのプロジェクトを作る，Makefileとtclスクリプトを自動生成するツールです．
+
+## 準備
+
+- Python3
+- ~/.vivado_hls_create_project: 設定ファイル
+	- Vivado HLSのパスを書いておくファイル
+	- JSON形式で以下のように記述する
+
+```
+{
+    "path_to_vivado": "/path/to/Xilinx/Vivado/20xx.x"
+}
+```
 
 ## 基本的な使い方
 
-### Makefileとtclスクリプトを生成する
-
-`project name`と`board name`を入力して下さい．
+gitコマンドのように，サブコマンドで使う機能を選択できます．
 
 ```
-$ vivado_hls_create_project -p `project name` -b `board name`
+$ vivado_hls_create_project -h
+usage: vivado_hls_create_project [-h] {list,create} ...
+
+Makefile and tcl scripts generator for Vivado HLS
+
+positional arguments:
+  {list,create}
+    list         List usable boards
+    create       Create Makefile and tcl scripts
+
+optional arguments:
+  -h, --help     show this help message and exit
 ```
 
-利用可能な`board name`は`-l`オプションで表示できます．
+listとcreateコマンドが使えます．
+
+### vivado_hls_create_project create
+
+プロジェクト名(sample)とボード名(Xilinx_ZedBoard)を以下のように入力して下さい．
 
 ```
-$ vivado_hls_create_project -l
+$ vivado_hls_create_project create sample -b Xilinx_ZedBoard
+```
+
+sampleディレクトリが生成され，以下にはMakefileやtclスクリプトが生成されます．
+
+```
+$ tree sample
+sample
+├── Makefile
+├── directives.tcl
+├── include
+├── script
+│   ├── cosim.tcl
+│   ├── csim.tcl
+│   ├── csynth.tcl
+│   ├── export.tcl
+│   └── init.tcl
+├── src
+└── test
+    ├── include
+    └── src
+
+6 directories, 7 files
+```
+
+詳細なオプションについては`create -h`を参照して下さい．
+
+### vivado_hls_create_project list
+
+createコマンドで指定できるボード名を確認できます．
+
+```
+$ vivado_hls_create_project list
 Board               Part
-----------------------------
+--------------------------------------------------
 Alpha-Data          xc7vx690tffg1157-2
 KU_Alphadata        xcku060-ffva1156-2-e
 Xilinx_ZedBoard     xc7z020clg484-1
@@ -42,41 +100,15 @@ Xilinx_ZCU102       xczu9eg-ffvb1156-2-i
 Xilinx_ZCU106       xczu7ev-ffvc1156-2-i-es2
 Xilinx_A-U200       xcu200-fsgd2104-2-e
 Xilinx_A-U250       xcu250-figd2104-2L-e
-Basys3              xc7a35t1cpg236-1
-Genesys2            xc7k325t2ffg900c-1
-Zybo                xc7z010clg400-1
-Zybo_Z7_10          xc7z010clg400-1
-Zybo_Z7_20          xc7z020clg400-1
 ```
 
-もしボードの種類を増やしたい場合，VivadoHls_boards.xmlを編集して下さい．
-
-### ヘルプ
-
-```
-$ vivado_hls_create_project -h
-usage: vivado_hls_create_project.py [-h] [-p PROJECT] [-b BOARD] [-s SOLUTION]
-                                    [-c CLOCK] [-l] [-cpp]
-
-generates Makefile and tcl scripts
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -p PROJECT, --project PROJECT
-                        project name
-  -b BOARD, --board BOARD
-                        board name
-  -s SOLUTION, --solution SOLUTION
-                        solution name
-  -c CLOCK, --clock CLOCK
-                        frequency or clock period
-  -l                    listing devices
-  -cpp                  generate C++ code
-```
+このボード名を追加または変更したい場合は，/path/to/Xilinx/Vivado/20xx.x/common/config/VivadoHls_boards.xmlを編集して下さい．
 
 ## ライセンス
 
-MIT License
+[MIT License](LICENSE.txt)
+
+ただしVivado HLSはXilinx社の商標です．
 
 ## コンタクト
 
