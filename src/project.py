@@ -73,7 +73,7 @@ def generate_tcl(board, clock, compiler_arg, linker_arg):
     # generate csim.tcl
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(base_path + "/template/tcl"))
     template = env.get_template("csim.tcl")
-    LINKER_ARG = "\"-ldflags{}\"".format(linker_arg) if linker_arg is not None else ""
+    LINKER_ARG = "-ldflags \"{}\"".format(linker_arg) if linker_arg is not None else ""
     data = {
         "LINKER_ARG": LINKER_ARG
     }
