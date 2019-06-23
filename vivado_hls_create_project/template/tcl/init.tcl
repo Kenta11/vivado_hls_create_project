@@ -6,6 +6,4 @@ foreach f $env(HLS_SOURCE) {
 }
 
 # add simulation files
-foreach f $env(HLS_TEST) {
-    add_files -tb $f -cflags "-Iinclude/ -Itest/include/ {{COMPILER_ARG}}"
-}
+add_files -tb $env(HLS_TEST) -cflags "-Iinclude/ -Itest/include/ {{COMPILER_ARG}}"

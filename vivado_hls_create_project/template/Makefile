@@ -46,10 +46,10 @@ $(CSIM): $(HLS_TARGET) $(HLS_SOURCE) $(HLS_TEST) $(HLS_HEADER)
 $(HLS_TARGET):
 	vivado_hls script/init.tcl
 
-.PHONY: distclean
-distclean:
-	rm -rf $(HLS_TARGET)
-
 .PHONY: clean
 clean:
 	rm -rf $(IP) $(COSIM) $(HDL) $(CSIM) *.log
+
+.PHONY: distclean
+distclean:
+	rm -rf $(HLS_TARGET)

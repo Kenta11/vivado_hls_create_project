@@ -10,12 +10,12 @@ A tool to automatically generate Makefile and tcl scripts for creating Vivado HL
 
 - Python3
 - ~/.vivado_hls_create_project: configuration file
-	- For setting path of Vivado HLS
-	- As bellow in JSON format
+	- For setting path of Vivado
+	- JSON format
 
 ```
 {
-    "path_to_vivado": "/path/to/Xilinx/Vivado/20xx.x"
+    "path_to_vivado ": "/path/to/Xilinx/Vivado/20xx.x"
 }
 ```
 
@@ -24,13 +24,11 @@ A tool to automatically generate Makefile and tcl scripts for creating Vivado HL
 Functions can be selected by subcommands, like *git*.
 
 ```
-$ vivado_hls_create_project -h
-usage: vivado_hls_create_project [-h] {list,create} ...
+Usage: vivado_hls_create_project [-h|--help] <command> [<args>]
 
 Makefile and tcl scripts generator for Vivado HLS
 
-positional arguments:
-  {list,create}
+<command>:
     list         List usable boards
     create       Create Makefile and tcl scripts
 
@@ -56,7 +54,7 @@ sample
 ├── Makefile
 ├── directives.tcl
 ├── include
-├── script
+├── scripts
 │   ├── cosim.tcl
 │   ├── csim.tcl
 │   ├── csynth.tcl
@@ -74,8 +72,7 @@ See `create -h` for more options.
 
 ### vivado_hls_create_project list
 
-createコマンドで指定できるボード名を確認できます．
-Boards name can be shown that can be specified with `create` subcommand.
+`list` shows boards name that can be specified with `create` subcommand.
 
 ```
 $ vivado_hls_create_project list
@@ -107,7 +104,7 @@ Edit /path/to/Xilinx/Vivado/20xx.x/common/config/VivadoHls_boards.xml if you wan
 
 ## License
 
-[MIT License](LICENSE.txt)
+[MIT License](LICENSE)
 
 Vivado HLS is trademark of Xilinx.
 

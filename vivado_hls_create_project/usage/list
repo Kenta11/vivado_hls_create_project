@@ -1,0 +1,6 @@
+Usage: vivado_hls_create_project list [-h|--help]
+
+Makefile and tcl scripts generator for Vivado HLS
+
+optional arguments:
+  -h, --help     show this help message and exit
