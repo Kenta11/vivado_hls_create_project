@@ -1,6 +1,8 @@
 #include "test_{{target}}.hpp"
 
-int main(int argc, char const **argv){
+#include "{{target}}.hpp"
+
+int main(int argc, const char **argv) {
     
 
     return 0;

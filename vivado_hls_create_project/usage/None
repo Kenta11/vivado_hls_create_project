@@ -1,0 +1,10 @@
+Usage: vivado_hls_create_project [-h|--help] <command> [<args>]
+
+Makefile and tcl scripts generator for Vivado HLS
+
+<command>:
+    list         list usable boards
+    create       create Makefile and tcl scripts
+
+optional arguments:
+  -h, --help     show this help message and exit

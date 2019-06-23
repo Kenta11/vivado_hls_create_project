@@ -4,13 +4,13 @@ English version: [vivado_hls_create_project](README.md)
 
 ## 概要
 
-Vivado HLSのプロジェクトを作る，Makefileとtclスクリプトを自動生成するツールです．
+Vivado HLSのプロジェクトを作るための，Makefileとtclスクリプトを自動生成するツールです．
 
 ## 準備
 
 - Python3
 - ~/.vivado_hls_create_project: 設定ファイル
-	- Vivado HLSのパスを書いておくファイル
+	- Vivadoのパスを書いておくファイル
 	- JSON形式で以下のように記述する
 
 ```
@@ -24,13 +24,11 @@ Vivado HLSのプロジェクトを作る，Makefileとtclスクリプトを自�
 gitコマンドのように，サブコマンドで使う機能を選択できます．
 
 ```
-$ vivado_hls_create_project -h
-usage: vivado_hls_create_project [-h] {list,create} ...
+Usage: vivado_hls_create_project [-h|--help] <command> [<args>]
 
 Makefile and tcl scripts generator for Vivado HLS
 
-positional arguments:
-  {list,create}
+<command>:
     list         List usable boards
     create       Create Makefile and tcl scripts
 
@@ -56,7 +54,7 @@ sample
 ├── Makefile
 ├── directives.tcl
 ├── include
-├── script
+├── scripts
 │   ├── cosim.tcl
 │   ├── csim.tcl
 │   ├── csynth.tcl
@@ -106,9 +104,9 @@ Xilinx_A-U250       xcu250-figd2104-2L-e
 
 ## ライセンス
 
-[MIT License](LICENSE.txt)
+[MIT License](LICENSE)
 
-ただしVivado HLSはXilinx社の商標です．
+Vivado HLSはXilinx社の商標です．
 
 ## コンタクト
 
