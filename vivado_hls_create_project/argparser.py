@@ -14,7 +14,6 @@ def parseArgs(argv):
         "help": False,\
         "solution": None,\
         "clock": None,\
-        "template": False,\
         "compiler_argument": None,\
         "linker_argument": None\
     }
@@ -54,12 +53,6 @@ def parseArgs(argv):
                 if config["clock"] is None:
                     config["clock"]             = argv[index+1]
                     index += 2
-                else:
-                    raise Exception
-            elif argv[index] in ["--template"]:
-                if config["template"] is False:
-                    config["template"]          = True
-                    index += 1
                 else:
                     raise Exception
             elif argv[index] in ["--compiler_argument"]:

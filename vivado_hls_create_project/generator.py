@@ -29,9 +29,7 @@ def generateCode(config):
     generateTcl(config["board"], config["clock"], config["compiler_argument"], config["linker_argument"])
     generateDirectives()
     generateGitignore(config["project"])
-
-    if config["template"]:
-        generateSourceCode(config["project"])
+    generateSourceCode(config["project"])
 
     os.chdir("../")
 

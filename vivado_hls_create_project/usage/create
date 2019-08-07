@@ -10,6 +10,5 @@ optional arguments:
   -h, --help                                 show this help message and exit
   -s, --solution <solution_name>             set solution name
   -c, --clock <clock>                        set clock frequency of module
-  --template                                 generate template C++ source code
   --compiler_argument <compiler_argument>    set arguments for compiler
   --linekr_argument <linker_argument>        set arguments for linker
