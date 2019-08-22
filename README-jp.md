@@ -19,7 +19,7 @@ Vivado HLSのプロジェクトを作るための，Makefileとtclスクリプ�
 }
 ```
 
-- vivado_hls_create_projectをインストールする
+## vivado_hls_create_projectをインストール
 
 ```
 $ git clone https://github.com/Kenta11/vivado_hls_create_project
@@ -107,7 +107,7 @@ Xilinx_A-U200       xcu200-fsgd2104-2-e
 Xilinx_A-U250       xcu250-figd2104-2L-e
 ```
 
-このボード名を追加または変更したい場合は，/path/to/Xilinx/Vivado/20xx.x/common/config/VivadoHls_boards.xmlを編集して下さい．
+このボード名を追加または変更したい場合は，/path/to/Xilinx/Vivado/20xx.x/data/boards/board_files/下のXMLファイルを編集して下さい．
 
 ## ライセンス
 

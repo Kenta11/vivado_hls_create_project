@@ -19,7 +19,7 @@ A tool to automatically generate Makefile and tcl scripts for creating Vivado HL
 }
 ```
 
-- install vivado_hls_create_project
+## install vivado_hls_create_project
 
 ```
 $ git clone https://github.com/Kenta11/vivado_hls_create_project
@@ -107,7 +107,7 @@ Xilinx_A-U200       xcu200-fsgd2104-2-e
 Xilinx_A-U250       xcu250-figd2104-2L-e
 ```
 
-Edit /path/to/Xilinx/Vivado/20xx.x/common/config/VivadoHls_boards.xml if you want to add/modify boards name.
+Edit XML files in /path/to/Xilinx/Vivado/20xx.x/data/boards/board_files/ if you want to add/modify boards name.
 
 ## License
 

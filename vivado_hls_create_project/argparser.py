@@ -86,8 +86,6 @@ def parseArgs(argv):
             exit(1)
     if config["solution"] is None:
         config["solution"] = config["project"]
-    if config["clock"] is None:
-        config["clock"] = "100MHz"
 
     return config
 

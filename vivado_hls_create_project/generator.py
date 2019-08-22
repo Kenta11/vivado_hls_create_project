@@ -97,9 +97,10 @@ def generateTcl(board:str, clock:str, compiler_arg, linker_arg):
 
     ##### csynth.tcl #####
     template = env.get_template("csynth.tcl")
+    part, base_clock = deviceinfo.searchDevice(board)
     data = {
-        "PART": "{" + deviceinfo.searchDevice(board) + "}",
-        "CLOCK": clock
+        "PART": "{" + part + "}",
+        "CLOCK": clock if clock is not None else base_clock
     }
     rendered = template.render(data)
     with open("script/csynth.tcl", "w") as f:
