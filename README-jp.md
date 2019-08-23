@@ -29,21 +29,23 @@ Usage: vivado_hls_create_project [-h|--help] <command> [<args>]
 Makefile and tcl scripts generator for Vivado HLS
 
 <command>:
-    list         List usable boards
-    create       Create Makefile and tcl scripts
+    list         list usable boards
+    create       create Makefile and tcl scripts
+    set-config   set parameter into ~/.vivado_hls_create_project
+    get-config   get parameter from ~/.vivado_hls_create_project
 
 optional arguments:
   -h, --help     show this help message and exit
 ```
 
-listとcreateコマンドが使えます．
+list，create，set-config，get-configコマンドが使えます．
 
 ### vivado_hls_create_project create
 
 プロジェクト名(sample)とボード名(Xilinx_ZedBoard)を以下のように入力して下さい．
 
 ```
-$ vivado_hls_create_project create sample -b Xilinx_ZedBoard
+$ vivado_hls_create_project create -b Xilinx_ZedBoard sample
 ```
 
 sampleディレクトリが生成され，以下にはMakefileやtclスクリプトが生成されます．
@@ -51,21 +53,25 @@ sampleディレクトリが生成され，以下にはMakefileやtclスクリプ
 ```
 $ tree sample
 sample
-├── Makefile
-├── directives.tcl
-├── include
-├── scripts
-│   ├── cosim.tcl
-│   ├── csim.tcl
-│   ├── csynth.tcl
-│   ├── export.tcl
-│   └── init.tcl
-├── src
-└── test
-    ├── include
-    └── src
+├ ─ ─  Makefile
+├ ─ ─  directives.tcl
+├ ─ ─  include
+│    └ ─ ─  sample.hpp
+├ ─ ─  script
+│    ├ ─ ─  cosim.tcl
+│    ├ ─ ─  csim.tcl
+│    ├ ─ ─  csynth.tcl
+│    ├ ─ ─  export.tcl
+│    └ ─ ─  init.tcl
+├ ─ ─  src
+│    └ ─ ─  sample.cpp
+└ ─ ─  test
+    ├ ─ ─  include
+    │    └ ─ ─  test_sample.hpp
+    └ ─ ─  src
+        └ ─ ─  test_sample.cpp
 
-6 directories, 7 files
+6 directories, 11 files
 ```
 
 詳細なオプションについては`create -h`を参照して下さい．
@@ -78,26 +84,38 @@ createコマンドで指定できるボード名を確認できます．
 $ vivado_hls_create_project list
 Board               Part
 --------------------------------------------------
-Alpha-Data          xc7vx690tffg1157-2
-KU_Alphadata        xcku060-ffva1156-2-e
-Xilinx_ZedBoard     xc7z020clg484-1
-Xilinx_AC701        xc7a200tfbg676-2
-Xilinx_KC705        xc7k325tffg900-2
-Xilinx_KCU105       xcku040-ffva1156-2-e
-Xilinx_KCU116       xcku5p-ffvb676-2-e
-Xilinx_KCU1500      xcku115-flvb2104-2-e
-Xilinx_VC707        xc7vx485tffg1761-2
-Xilinx_VC709        xc7vx690tffg1761-2
-Xilinx_VCU108       xcvu095-ffva2104-2-e
-Xilinx_VCU110       xcvu190-flgc2104-2-e
-Xilinx_VCU118       xcvu9p-flga2104-2L-e
-Xilinx_VCU1525      xcvu9p-fsgd2104-2L-e
-Xilinx_ZC702        xc7z020clg484-1
-Xilinx_ZC706        xc7z045ffg900-2
-Xilinx_ZCU102       xczu9eg-ffvb1156-2-i
-Xilinx_ZCU106       xczu7ev-ffvc1156-2-i-es2
-Xilinx_A-U200       xcu200-fsgd2104-2-e
-Xilinx_A-U250       xcu250-figd2104-2L-e
+basys3              xc7a35tcpg236-1
+cmod-s7-25          xc7s25csga225-1
+nexys4              xc7a100tcsg324-1
+sword               xc7k325tffg900-2
+arty-a7-35          xc7a35ticsg324-1L
+zybo-z7-10          xc7z010clg400-1
+genesys2            xc7k325tffg900-2
+nexys_video         xc7a200tsbg484-1
+cmod_a7-35t         xc7a35tcpg236-1
+cora-z7-10          xc7z010clg400-1
+zybo-z7-20          xc7z020clg400-1
+eclypse-z7          xc7z020clg484-1
+zc702               xc7z020clg484-1
+cora-z7-07s         xc7z007sclg400-1
+ac701               xc7a200tfbg676-2
+arty                xc7a35ticsg324-1L
+kcu116              xcku5p-ffvb676-2-e
+arty-s7-25          xc7s25csga324-1
+zcu106              xczu7ev-ffvc1156-2-e
+arty-z7-10          xc7z010clg400-1
+zed                 xc7z020clg484-1
+zcu104              xczu7ev-ffvc1156-2-e
+nexys-a7-50t        xc7a50ticsg324-1L
+sp701               xc7s100fgga676-2
+nexys4_ddr          xc7a100tcsg324-1
+zedboard            xc7z020clg484-1
+arty-s7-50          xc7s50csga324-1
+zybo                xc7z010clg400-1
+arty-z7-20          xc7z020clg400-1
+cmod_a7-15t         xc7a15tcpg236-1
+arty-a7-100         xc7a100tcsg324-1
+nexys-a7-100t       xc7a100tcsg324-1
 ```
 
 このボード名を追加または変更したい場合は，/path/to/Xilinx/Vivado/20xx.x/data/boards/board_files/下のXMLファイルを編集して下さい．
