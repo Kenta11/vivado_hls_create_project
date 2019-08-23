@@ -11,52 +11,37 @@ from pathlib import Path
 from . import deviceinfo
 
 def createProject(config):
-    generateDirectories(config["project"])
-    generateCode(config)
+    if os.path.exists(config["project"]):
+        logger.error("Directory {} already exists".format(config["project"]))
+        exit(1)
+    for d in ["include", "src", "test/include", "test/src", "script"]:
+        os.makedirs(Path(config["project"]) / d)
 
-def generateDirectories(project_name:str):
-    generateDirectory(project_name)
-    generateDirectory(project_name+"/include")
-    generateDirectory(project_name+"/src")
-    generateDirectory(project_name+"/test/include")
-    generateDirectory(project_name+"/test/src")
-    generateDirectory(project_name+"/script")
-
-def generateCode(config):
     os.chdir(config["project"])
 
     generateMakefile(config["project"], config["solution"])
-    generateTcl(config["board"], config["clock"], config["compiler_argument"], config["linker_argument"])
+    generateTcl(\
+        config["board"], config["clock"], config["compiler_argument"], config["linker_argument"]\
+    )
     generateDirectives()
     generateGitignore(config["project"])
     generateSourceCode(config["project"])
 
     os.chdir("../")
 
-def generateDirectory(name:str):
-    if os.path.isdir(name):
-        logger.warning("{} exists! Skipping...".format(name))
-    elif os.path.isfile(name):
-        logger.error("{} is a file!".format(name))
-        exit(1)
-    else:
-        logger.info("generate {}".format(name))
-        os.makedirs(name, exist_ok = True)
-
 def generateMakefile(project:str, solution:str):
     logger.info("generate Makefile")
 
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(\
-         str(Path(os.path.dirname(__file__)) / "template")\
+         str(Path(os.path.dirname(__file__))/"template")\
     ))
     template = env.get_template("Makefile")
     data = {
         "TARGET": project,
         "SOLUTION": solution
     }
-    rendered = template.render(data)
     with open("Makefile", "w") as f:
-        f.write(str(rendered))
+        f.write(str(template.render(data)))
 
 def generateTcl(board:str, clock:str, compiler_arg, linker_arg):
     logger.info("generate tcl scripts")
@@ -64,13 +49,13 @@ def generateTcl(board:str, clock:str, compiler_arg, linker_arg):
     ##### cosim.tcl, export.tcl #####
     for name in ["cosim.tcl", "export.tcl"]:
         shutil.copy(\
-            str(Path(os.path.dirname(__file__)) / "template/tcl/{}".format(name)),\
-            "script/{}".format(name)\
+            str(Path(os.path.dirname(__file__))/"template/tcl"/name),\
+            "script/"+name\
         )
 
     ##### init.tcl #####
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(\
-        str(Path(os.path.dirname(__file__)) / "template/tcl")\
+        str(Path(os.path.dirname(__file__))/"template/tcl")\
     ))
     template = env.get_template("init.tcl")
     COMPILER_ARG = ""
@@ -79,9 +64,8 @@ def generateTcl(board:str, clock:str, compiler_arg, linker_arg):
     data = {
         "COMPILER_ARG": COMPILER_ARG
     }
-    rendered = template.render(data)
     with open("script/init.tcl", "w") as f:
-        f.write(str(rendered))
+        f.write(str(template.render(data)))
 
     ##### csim.tcl #####
     template = env.get_template("csim.tcl")
@@ -91,9 +75,8 @@ def generateTcl(board:str, clock:str, compiler_arg, linker_arg):
     data = {
         "LINKER_ARG": LINKER_ARG
     }
-    rendered = template.render(data)
     with open("script/csim.tcl", "w") as f:
-        f.write(str(rendered))
+        f.write(str(template.render(data)))
 
     ##### csynth.tcl #####
     template = env.get_template("csynth.tcl")
@@ -102,9 +85,8 @@ def generateTcl(board:str, clock:str, compiler_arg, linker_arg):
         "PART": "{" + part + "}",
         "CLOCK": clock if clock is not None else base_clock
     }
-    rendered = template.render(data)
     with open("script/csynth.tcl", "w") as f:
-        f.write(str(rendered))
+        f.write(str(template.render(data)))
 
 def generateDirectives():
     logger.info("generate directives.tcl")
@@ -115,15 +97,14 @@ def generateGitignore(project:str):
     logger.info("generate .gitignore")
 
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(\
-        str(Path(os.path.dirname(__file__)) / "template")\
+        str(Path(os.path.dirname(__file__))/"template")\
     ))
     template = env.get_template("gitignore")
     data = {
         "TARGET": project
     }
-    rendered = template.render(data)
     with open(".gitignore", "w") as f:
-        f.write(str(rendered))
+        f.write(str(template.render(data)))
 
 def generateSourceCode(target:str):
     logger.info("generate source code")
@@ -133,14 +114,15 @@ def generateSourceCode(target:str):
         "TARGET": target.upper()
     }
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(\
-        str(Path(os.path.dirname(__file__)) / "template/c++")\
+        str(Path(os.path.dirname(__file__))/"template/c++")\
     ))
 
-    for src, dst in zip(\
-        ["header.hpp", "code.cpp", "test-header.hpp", "test-code.cpp"],\
-        ["include/{}.hpp", "src/{}.cpp", "test/include/test_{}.hpp", "test/src/test_{}.cpp"]\
-    ):
+    srcs = ["header.hpp", "code.cpp", "test-header.hpp", "test-code.cpp"]
+    dsts = [\
+        "include/{}.hpp", "src/{}.cpp",\
+        "test/include/test_{}.hpp", "test/src/test_{}.cpp"\
+    ]
+    for src, dst in zip(srcs, dsts):
         template = env.get_template(src)
-        rendered = template.render(data)
         with open(dst.format(target), "w") as f:
-            f.write(str(rendered))
+            f.write(str(template.render(data)))
