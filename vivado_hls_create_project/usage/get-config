@@ -1,0 +1,3 @@
+Usage: vivado_hls_create_project get-config <key>
+
+Makefile and tcl scripts generator for Vivado HLS

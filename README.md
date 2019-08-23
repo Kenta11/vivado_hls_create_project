@@ -6,23 +6,17 @@
 
 A tool to automatically generate Makefile and tcl scripts for creating Vivado HLS projects.
 
-## Preparation
+## Requirements
 
 - Python3
-- ~/.vivado_hls_create_project: configuration file
-	- For setting path of Vivado
-	- JSON format
+- GNU make
 
-```
-{
-    "path_to_vivado ": "/path/to/Xilinx/Vivado/20xx.x"
-}
-```
-
-## install vivado_hls_create_project
+## Install vivado_hls_create_project
 
 ```
 $ sudo pip install git+https://github.com/Kenta11/vivado_hls_create_project
+$ vivado_hls_create_project set-config path_to_vivado /path/to/Xilinx/Vivado/20xx.x
+# set absolute path to Vivado on /path/to/Xilinx/Vivado/20xx.x
 ```
 
 ## Basic Usage

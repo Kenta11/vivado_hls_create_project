@@ -6,23 +6,17 @@ English version: [vivado_hls_create_project](README.md)
 
 Vivado HLSのプロジェクトを作るための，Makefileとtclスクリプトを自動生成するツールです．
 
-## 準備
+## 要件
 
 - Python3
-- ~/.vivado_hls_create_project: 設定ファイル
-	- Vivadoのパスを書いておくファイル
-	- JSON形式で以下のように記述する
-
-```
-{
-    "path_to_vivado": "/path/to/Xilinx/Vivado/20xx.x"
-}
-```
+- GNU Make
 
 ## vivado_hls_create_projectをインストール
 
 ```
 $ sudo pip install git+https://github.com/Kenta11/vivado_hls_create_project
+$ vivado_hls_create_project set-config path_to_vivado /path/to/Xilinx/Vivado/20xx.x
+# /path/to/Xilinx/Vivado/20xx.x にはVivadoへの絶対パスを設定して下さい
 ```
 
 ## 基本的な使い方

@@ -5,6 +5,8 @@ Makefile and tcl scripts generator for Vivado HLS
 <command>:
     list         list usable boards
     create       create Makefile and tcl scripts
+    set-config   set parameter into ~/.vivado_hls_create_project
+    get-config   get parameter from ~/.vivado_hls_create_project
 
 optional arguments:
   -h, --help     show this help message and exit
