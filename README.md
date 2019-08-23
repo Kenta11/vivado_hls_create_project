@@ -22,8 +22,7 @@ A tool to automatically generate Makefile and tcl scripts for creating Vivado HL
 ## install vivado_hls_create_project
 
 ```
-$ git clone https://github.com/Kenta11/vivado_hls_create_project
-$ sudo pip install vivado_hls_create_project
+$ sudo pip install git+https://github.com/Kenta11/vivado_hls_create_project
 ```
 
 ## Basic Usage

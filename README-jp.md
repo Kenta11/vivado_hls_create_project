@@ -22,8 +22,7 @@ Vivado HLSのプロジェクトを作るための，Makefileとtclスクリプ�
 ## vivado_hls_create_projectをインストール
 
 ```
-$ git clone https://github.com/Kenta11/vivado_hls_create_project
-$ sudo pip install vivado_hls_create_project
+$ sudo pip install git+https://github.com/Kenta11/vivado_hls_create_project
 ```
 
 ## 基本的な使い方
