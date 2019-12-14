@@ -9,12 +9,12 @@ A tool to automatically generate Makefile and tcl scripts for Vivado HLS.
 ## Requirements
 
 - Python3 and pip
-- GNU make
+- GNU Make
 
 ## Install
 
 ```
-$ sudo pip install https://github.com/Kenta11/vivado_hls_create_project
+$ sudo pip install git+https://github.com/Kenta11/vivado_hls_create_project
 $ vivado_hls_create_project set-config path_to_vivado /path/to/Xilinx/Vivado/20xx.x
 ```
 
