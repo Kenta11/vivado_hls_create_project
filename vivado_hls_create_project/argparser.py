@@ -6,17 +6,19 @@ import os
 from logzero import logger
 from pathlib import Path
 
-def parseArgs(argv):
-    config = {\
-        "command": None,\
-        "project": None,\
-        "board": None,\
-        "help": False,\
-        "solution": None,\
-        "clock": None,\
-        "compiler_argument": None,\
-        "linker_argument": None,\
-        "arg": []\
+from vivado_hls_create_project.__init__ import __version__
+
+def parseArgs(argv)->dict:
+    config = {
+        "command": None,
+        "project": None,
+        "board": None,
+        "help": False,
+        "solution": None,
+        "clock": None,
+        "compiler_argument": None,
+        "linker_argument": None,
+        "arg": []
     }
 
     # parse arguments
@@ -25,6 +27,9 @@ def parseArgs(argv):
             config["command"] = argv[0]
         elif argv[0] in ["-h", "--help"]:
             config["help"] = True
+        elif argv[0] in ["-v", "--version"]:
+            print("v"+__version__)
+            exit(0)
 
     if config["command"] == "create":
         index = 1
@@ -102,6 +107,6 @@ def parseArgs(argv):
 
     return config
 
-def printUsage(command):
+def printUsage(command)->None:
     with open(Path(os.path.dirname(__file__))/"usage"/str(command), "r") as f:
         print(f.read())

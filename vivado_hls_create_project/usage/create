@@ -11,4 +11,4 @@ optional arguments:
   -s, --solution <solution_name>             set solution name
   -c, --clock <clock>                        set clock frequency of module
   --compiler_argument <compiler_argument>    set arguments for compiler
-  --linekr_argument <linker_argument>        set arguments for linker
+  --linker_argument <linker_argument>        set arguments for linker

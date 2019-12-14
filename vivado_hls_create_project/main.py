@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import json
 import os
 import sys
-import json
 
 from logzero import logger
 
-from . import generator
-from . import argparser
-from . import deviceinfo
+from vivado_hls_create_project import generator
+from vivado_hls_create_project import argparser
+from vivado_hls_create_project import deviceinfo
 
-def main():
+def main()->None:
     config = argparser.parseArgs(sys.argv[1:])
     path_to_config = os.path.expanduser("~/.vivado_hls_create_project")
 
@@ -46,9 +46,6 @@ def main():
         try:
             print(data[config["arg"][0]])
         except KeyError:
-            logger.error("Key error: key={} config={}".format(config["arg"][0], data))
+            logger.error("Key error: key={}".format(config["arg"][0]))
     else:
         logger.error("Invalid arguments")
-
-if __name__ == '__main__':
-    main()

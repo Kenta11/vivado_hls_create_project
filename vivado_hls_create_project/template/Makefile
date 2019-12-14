@@ -1,19 +1,21 @@
 ##### configuration #####
 
+VIVADO_HLS := $(shell vivado_hls_create_project get-config path_to_vivado)/bin/vivado_hls
+
 # project and solution name
-export HLS_TARGET   = {{TARGET}}
-export HLS_SOLUTION = {{SOLUTION}}
+export HLS_TARGET   := {{TARGET}}
+export HLS_SOLUTION := {{SOLUTION}}
 # source files
-HLS_HEADER          = $(wildcard include/*) $(wildcard test/include/*)
-export HLS_SOURCE   = $(wildcard src/*)
-export HLS_TEST     = $(wildcard test/src/*)
+HLS_HEADER          := $(wildcard include/*) $(wildcard test/include/*)
+export HLS_SOURCE   := $(wildcard src/*)
+export HLS_TEST     := $(wildcard test/src/*)
 
 # result
-BASE_DIR = $(HLS_TARGET)/$(HLS_SOLUTION)
-IP       = $(BASE_DIR)/impl
-COSIM    = $(BASE_DIR)/sim
-HDL      = $(BASE_DIR)/syn
-CSIM     = $(BASE_DIR)/csim
+BASE_DIR := $(HLS_TARGET)/$(HLS_SOLUTION)
+IP       := $(BASE_DIR)/impl
+COSIM    := $(BASE_DIR)/sim
+HDL      := $(BASE_DIR)/syn
+CSIM     := $(BASE_DIR)/csim
 
 ##### targets and commands #####
 
@@ -23,28 +25,28 @@ all: $(IP)
 .PHONY: export
 export: $(IP)
 $(IP): $(HDL)
-	vivado_hls script/export.tcl
+	$(VIVADO_HLS) script/export.tcl
 
 .PHONY: cosim
 cosim: $(COSIM)
 $(COSIM): $(HDL)
-	vivado_hls script/cosim.tcl
+	$(VIVADO_HLS) script/cosim.tcl
 	touch $@
 
 .PHONY: csynth
 csynth: $(HDL)
 $(HDL): $(CSIM)
-	vivado_hls script/csynth.tcl
+	$(VIVADO_HLS) script/csynth.tcl
 	touch $@
 
 .PHONY: csim
 csim: $(CSIM)
 $(CSIM): $(HLS_TARGET) $(HLS_SOURCE) $(HLS_TEST) $(HLS_HEADER)
-	vivado_hls script/csim.tcl
+	$(VIVADO_HLS) script/csim.tcl
 	touch $@
 
 $(HLS_TARGET):
-	vivado_hls script/init.tcl
+	$(VIVADO_HLS) script/init.tcl
 
 .PHONY: clean
 clean:
